@@ -120,6 +120,32 @@
       <tbody id="results"></tbody>
     </table>
   </div>
+  <!-- START: Burndown Chart -->
+  <section class="burndown" aria-labelledby="burndown-title">
+
+    <h2 id="burndown-title">
+      Orphan Account Remediation Burndown
+    </h2>
+
+    <p class="chart-note">
+      Open orphan accounts remaining at the end of
+      each day. Synthetic demo data.
+    </p>
+
+    <div class="chart-wrap">
+      <svg
+        id="burndown-chart"
+        role="img"
+        aria-label="Orphan accounts decreasing from 8 to 3 over 7 days"
+        viewBox="0 0 700 320"
+        preserveAspectRatio="xMidYMid meet">
+      </svg>
+    </div>
+
+    <p id="burndown-summary" class="chart-summary"></p>
+
+  </section>
+  <!-- END: Burndown Chart -->
 </main>
 
 <script>
