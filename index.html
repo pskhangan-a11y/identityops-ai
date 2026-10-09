@@ -138,16 +138,46 @@ document.getElementById("total").textContent = accounts.length;
 document.getElementById("orphans").textContent = orphans.length;
 document.getElementById("highrisk").textContent = highRisk.length;
 
-document.getElementById("results").innerHTML =
-  orphans.map(a => `
-    <tr>
-      <td>${a.name}</td>
-      <td>Unassigned</td>
-      <td class="risk">
-        ${a.privileged ? "HIGH" : "MEDIUM"}
-      </td>
-    </tr>
-  `).join("");
+function renderAccounts(risk = "ALL") {
+  const filtered = orphans.filter(account => {
+    const accountRisk = account.privileged
+      ? "HIGH"
+      : "MEDIUM";
+
+    return risk === "ALL" || accountRisk === risk;
+  });
+
+  document.getElementById("results").innerHTML =
+    filtered.map(account => `
+      <tr>
+        <td>${account.name}</td>
+        <td>Unassigned</td>
+        <td class="risk">
+          ${account.privileged ? "HIGH" : "MEDIUM"}
+        </td>
+      </tr>
+    `).join("") ||
+    `<tr><td colspan="3">No accounts found</td></tr>`;
+}
+
+// Activate filter buttons
+document.querySelectorAll(".filter-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    const selectedRisk = button.dataset.risk;
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      const isActive = btn === button;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", String(isActive));
+    });
+
+    renderAccounts(selectedRisk);
+  });
+});
+
+// Display all orphan accounts initially
+renderAccounts("ALL");
+
 </script>
 </body>
 </html>
