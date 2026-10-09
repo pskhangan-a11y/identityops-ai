@@ -245,6 +245,106 @@ document.querySelectorAll(".filter-btn").forEach(button => {
 // Display all orphan accounts initially
 renderAccounts("ALL");
 
+/* Burndown Chart - Synthetic IAM Data */
+
+const burndownData = [8, 7, 6, 5, 5, 4, 3];
+
+const svg = document.getElementById("burndown-chart");
+
+const xAt = index => 60 + index * 100;
+const yAt = value => 265 - (value / 8) * 220;
+
+// Helper function to draw SVG elements
+function addSvg(tag, attributes, label = "") {
+  const element = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    tag
+  );
+
+  Object.entries(attributes).forEach(([key, value]) => {
+    element.setAttribute(key, value);
+  });
+
+  if (label !== "") {
+    element.textContent = label;
+  }
+
+  svg.appendChild(element);
+}
+
+// Draw horizontal grid lines and Y-axis values
+[0, 2, 4, 6, 8].forEach(value => {
+  addSvg("line", {
+    x1: 60,
+    y1: yAt(value),
+    x2: 660,
+    y2: yAt(value),
+    stroke: "#dbe5f0"
+  });
+
+  addSvg("text", {
+    x: 45,
+    y: yAt(value) + 4,
+    "text-anchor": "end",
+    fill: "#64748b",
+    "font-size": 13
+  }, String(value));
+});
+
+// Create line-chart coordinates
+const points = burndownData.map((value, index) =>
+  `${xAt(index)},${yAt(value)}`
+).join(" ");
+
+// Draw the burndown line
+addSvg("polyline", {
+  points: points,
+  fill: "none",
+  stroke: "#23477d",
+  "stroke-width": 4,
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round"
+});
+
+// Draw data points and day labels
+burndownData.forEach((value, index) => {
+  addSvg("circle", {
+    cx: xAt(index),
+    cy: yAt(value),
+    r: 6,
+    fill: "#23477d"
+  });
+
+  addSvg("text", {
+    x: xAt(index),
+    y: yAt(value) - 14,
+    "text-anchor": "middle",
+    fill: "#23477d",
+    "font-size": 14,
+    "font-weight": "bold"
+  }, String(value));
+
+  addSvg("text", {
+    x: xAt(index),
+    y: 295,
+    "text-anchor": "middle",
+    fill: "#64748b",
+    "font-size": 13
+  }, `Day ${index + 1}`);
+});
+
+// Calculate remediation progress
+const initial = burndownData[0];
+const remaining = burndownData[burndownData.length - 1];
+const remediated = initial - remaining;
+const percentage = (remediated / initial) * 100;
+
+document.getElementById("burndown-summary").textContent =
+  `${remediated} orphan accounts remediated ` +
+  `(${percentage.toFixed(1)}%) over 7 days. ` +
+  `${remaining} accounts remaining. ` +
+  `Synthetic demo data.`;
+
 </script>
 </body>
 </html>
