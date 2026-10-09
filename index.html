@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IdentityOps AI</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6fa;
+    margin: 0;
+    padding: 24px;
+    color: #172334;
+  }
+  main { max-width: 950px; margin: auto; }
+  h1 { color: #23477d; }
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1;
+    min-width: 160px;
+  }
+  .number { font-size: 30px; font-weight: bold; }
+  table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  th { background: #e7edf7; }
+  .risk { color: #ba2727; font-weight: bold; }
+  .table-wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+  <h1>IdentityOps AI</h1>
+  <p>Open-source IAM Analytics Dashboard</p>
+  <p>Demo using synthetic data only.</p>
+
+  <section class="cards">
+    <div class="card">
+      Total Accounts
+      <div class="number" id="total"></div>
+    </div>
+    <div class="card">
+      Orphan Accounts
+      <div class="number" id="orphans"></div>
+    </div>
+    <div class="card">
+      High-Risk Orphans
+      <div class="number" id="highrisk"></div>
+    </div>
+  </section>
+
+  <h2>Orphan Account Detection</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Owner</th>
+          <th>Risk</th>
+        </tr>
+      </thead>
+      <tbody id="results"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+const accounts = [
+  {name:"admin01", owner:"", privileged:true},
+  {name:"user02", owner:"Employee A", privileged:false},
+  {name:"svc_backup", owner:"", privileged:false},
+  {name:"user04", owner:"Employee B", privileged:false},
+  {name:"admin05", owner:"", privileged:true}
+];
+
+const orphans = accounts.filter(a => !a.owner);
+const highRisk = orphans.filter(a => a.privileged);
+
+document.getElementById("total").textContent = accounts.length;
+document.getElementById("orphans").textContent = orphans.length;
+document.getElementById("highrisk").textContent = highRisk.length;
+
+document.getElementById("results").innerHTML =
+  orphans.map(a => `
+    <tr>
+      <td>${a.name}</td>
+      <td>Unassigned</td>
+      <td class="risk">
+        ${a.privileged ? "HIGH" : "MEDIUM"}
+      </td>
+    </tr>
+  `).join("");
+</script>
+</body>
+</html>
