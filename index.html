@@ -42,6 +42,41 @@
   th { background: #e7edf7; }
   .risk { color: #ba2727; font-weight: bold; }
   .table-wrap { overflow-x: auto; }
+
+/* Risk filter buttons */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 16px 0 20px;
+}
+
+.filter-btn {
+  padding: 10px 22px;
+  border: 1px solid #b9c7da;
+  border-radius: 8px;
+  background: white;
+  color: #23477d;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.filter-btn:hover {
+  background: #e7edf7;
+}
+
+.filter-btn.active {
+  background: #23477d;
+  color: white;
+  border-color: #23477d;
+}
+
+.filter-btn:focus-visible {
+  outline: 3px solid #5688d3;
+  outline-offset: 2px;
+}
+
 </style>
 </head>
 <body>
